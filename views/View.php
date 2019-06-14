@@ -10,16 +10,19 @@ and open the template in the editor.
         <title>my first project Dejan</title>
     </head>
     <body>
-        <form method="post" action = "./controllers/presenter.php">
+        <form method="post" action = "../controllers/presenter.php">
           Voer een tekst in
           <br>
              <input type="text"  name="naam">
-  
             <input type="submit" name="submit" value="Submit">
         </form>
+        <p>
         <?php
-        
+        echo $viewData["palindroom"] . "<br>";
+        echo $viewData["message"] . "<br>";
+        echo $viewData["action"];
         
         ?>
+        </p>
     </body>                                           
 </html>

@@ -12,14 +12,19 @@
  * @author Gebruiker
  */
 
-$db = new Dbhandler();
-if ($db->findwoord("lepel") == TRUE){
-    $db->printWoord();
-}
-else{
-    echo "Geen KAAAAAAAAASSSSSS vnadaag";
-}
 
+
+//$db = new Dbhandler();
+//if ($db->findwoord("pop") == TRUE){
+//    $db->printWoord();
+//}
+//else{
+//    echo "Niet gevonden in de database";
+//}
+
+
+
+include_once '_config.php';
 
 class Dbhandler {
     //dit noemen in 00 een attribute
@@ -28,26 +33,15 @@ class Dbhandler {
     //een functie in 00 heet een method
     function findWoord($woord){
         $result = FALSE;
-        $this->woord = $woord;
-        $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-       ];         
-                
-       $host = '127.0.0.1';
-       $charset = 'utf8mb4';
-       $db = 'palindroom';
-       $user = "root";
-       $password = "";
-       
-       $host = "mysql:host=$host;dbname=$db;charset=$charset";
+        $this->woord = $woord;    
+        
+        $options = $this ->setPDOoptions();
        
        $sql = "SELECT * FROM palindromen WHERE woord='".$woord."';";
        
        try {
            //stap2
-           $conn = new PDO($host, $user, $password, $options);
+           $conn = $this->connectToDatabase($options);
            //stap 3
            $stmt = $conn->query($sql);
            //stap 4
@@ -63,6 +57,27 @@ class Dbhandler {
      
     }
     
+   private function setPDOoptions(){ 
+      $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+       ];         
+     return $options;
+   }
+   
+   private function connectToDatabase($options){
+       $host = '127.0.0.1';
+       $charset = 'utf8mb4';
+       $db = 'palindroom';
+      
+       $host = "mysql:host=$host;dbname=$db;charset=$charset";
+       
+       $conn = new PDO($host, USER, PASSWORD, $options);
+       
+       return $conn;
+   } 
+   
     function printWoord(){
         echo $this->woord;
     }
